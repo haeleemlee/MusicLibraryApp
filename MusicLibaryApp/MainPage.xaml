@@ -44,9 +44,9 @@
             </Grid.RowDefinitions>
 
             <Button Name="PlayButton" Click="PlayButton_Click">Play</Button>
-            <Button Grid.Row="1" Click="Button_Click">Details</Button>
+            <Button Grid.Row="1" Click="DetailButton_Click">Details</Button>
             <Button Grid.Row="2">Edit</Button>
-            <Button Grid.Row="3">Add</Button>
+            <Button Grid.Row="3" Click="AddButton_Click">Add</Button>
         </Grid>
 
     </Grid>

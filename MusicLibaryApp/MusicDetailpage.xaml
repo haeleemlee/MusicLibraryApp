@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="MusicLibaryApp.BlankPage1"
+    x:Class="MusicLibaryApp.MusicDetailpage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MusicLibaryApp"
@@ -9,6 +9,35 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <StackPanel Orientation="Vertical" Margin="150, 150, 0, 0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Music Detail" Width =" 100" Height="50"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Title" Width =" 100" Height="50"/>
+                <TextBox Name="TxtStrTitle" Height=" 35" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Singer" Width =" 100" Height="50"/>
+                <TextBox Name="TxtStrSinger" Height=" 35" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Album" Width =" 100" Height="50"/>
+                <TextBox x:Name="TxtStrAlbum" Height=" 35" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Year" Width =" 100" Height="50"/>
+                <TextBox Name="TxtStrYear" Height=" 35" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin = "0, 20, 0, 0">
+                <TextBlock Text="Cover Image" Width =" 100" Height="50"/>
+                <TextBox x:Name="TxtStrImg" Height=" 200" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin = "20, 20, 0, 0">
+                <Button Content="Back" Click="BackButton_Click"/>
+            </StackPanel>
+            <Image x:Name="image" HorizontalAlignment="Left" Height="200" Margin="150,400,0,0" VerticalAlignment="Top" Width="200" Stretch="Uniform"/>
+        </StackPanel>
         <ListView Name="MusicLib" ItemsSource="{Binding}" Height="400" Width="400" ScrollViewer.VerticalScrollBarVisibility="Auto" FontFamily="Segoe UI">
             <ListView.ItemTemplate>
                 <DataTemplate>

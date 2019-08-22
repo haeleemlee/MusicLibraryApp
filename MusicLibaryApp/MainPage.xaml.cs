@@ -1,22 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Media.Playback;
 using Windows.Media.Core;
-using Windows.Storage.Pickers;
-using Windows.Storage.Streams;
 
 
 
@@ -41,7 +28,9 @@ namespace MusicLibaryApp
         private async void PlayButton_Click(object sender, RoutedEventArgs e)
         {
             Windows.Storage.StorageFolder folder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync(@"Assets");
-            Windows.Storage.StorageFile file = await folder.GetFileAsync("onesong.mp3");
+            //Windows.Storage.StorageFile file = await folder.GetFileAsync("onesong.mp3");
+            Windows.Storage.StorageFile file = await folder.GetFileAsync("Test.mp3");
+
             player.AutoPlay = false;
             player.Source = MediaSource.CreateFromStorageFile(file);
 
@@ -63,18 +52,43 @@ namespace MusicLibaryApp
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void DetailButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Windows.Storage.StorageFolder folder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync(@"Assets");
+            //Windows.Storage.StorageFile file = await folder.GetFileAsync("onesong.mp3");
+            Windows.Storage.StorageFile file = await folder.GetFileAsync("Test.mp3");
+            this.Frame.Navigate(typeof(MusicDetailpage), file.Path);
         }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(AddMusicPage));
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (e.Parameter != null && e.Parameter.GetType() == typeof(MusicEntry))
+            {
+                MusicEntry entry = e.Parameter as MusicEntry;
+
+                //entry.musicFilePath
+                //entry.imageFilePath
+
+                // save here
+
+
+            }
+        }
+
+
 
         /*private void One_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListView one = sender as ListView;
             string selected = one.SelectedItem.ToString();
             MessageDialog dlg = new MessageDialog("selected number;" + selected);
-            
+
         }*/
     }
 
-}
+    }
