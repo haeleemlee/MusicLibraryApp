@@ -17,6 +17,11 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MusicLibaryApp
 {
+    class GlobalData
+    {
+        static public List<MusicEntry> _entryList = new List<MusicEntry>();
+    }
+
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
@@ -71,6 +76,13 @@ namespace MusicLibaryApp
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
+
+
+            // TODO: load all music entry from file to GlobalData._entryList here.
+
+            // GlobalData._entryList
+
+
         }
 
         /// <summary>
@@ -95,6 +107,12 @@ namespace MusicLibaryApp
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
+
+            // TODO: write all data from GlobalData._entryList to Disk here
+
+            // GlobalData._entryList
+
+
         }
     }
 }

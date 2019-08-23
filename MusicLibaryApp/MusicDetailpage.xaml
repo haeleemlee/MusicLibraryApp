@@ -31,12 +31,12 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin = "0, 20, 0, 0">
                 <TextBlock Text="Cover Image" Width =" 100" Height="50"/>
-                <TextBox x:Name="TxtStrImg" Height=" 200" Width="200"/>
+                <Image x:Name="image" HorizontalAlignment="Left" Height="200" Margin="0,0,0,0" VerticalAlignment="Top" Width="200" Stretch="Uniform"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin = "20, 20, 0, 0">
                 <Button Content="Back" Click="BackButton_Click"/>
             </StackPanel>
-            <Image x:Name="image" HorizontalAlignment="Left" Height="200" Margin="150,400,0,0" VerticalAlignment="Top" Width="200" Stretch="Uniform"/>
+            
         </StackPanel>
         <ListView Name="MusicLib" ItemsSource="{Binding}" Height="400" Width="400" ScrollViewer.VerticalScrollBarVisibility="Auto" FontFamily="Segoe UI">
             <ListView.ItemTemplate>

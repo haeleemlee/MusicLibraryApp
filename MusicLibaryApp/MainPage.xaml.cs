@@ -4,7 +4,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Windows.Media.Playback;
 using Windows.Media.Core;
-
+using System.Collections.Generic;
 
 
 
@@ -19,17 +19,19 @@ namespace MusicLibaryApp
     {
         MediaPlayer player;
         bool playing;
+
         public MainPage()
         {
             this.InitializeComponent();
             player = new MediaPlayer();
         }
+        
 
         private async void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.Storage.StorageFolder folder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync(@"Assets");
-            //Windows.Storage.StorageFile file = await folder.GetFileAsync("onesong.mp3");
-            Windows.Storage.StorageFile file = await folder.GetFileAsync("Test.mp3");
+
+            MusicEntry musicEntry = GlobalData._entryList[0]; // need to use index from GUI list box
+            Windows.Storage.StorageFile file = await Windows.Storage.StorageFile.GetFileFromPathAsync(musicEntry.musicFilePath);
 
             player.AutoPlay = false;
             player.Source = MediaSource.CreateFromStorageFile(file);
@@ -42,22 +44,13 @@ namespace MusicLibaryApp
             { player.Play();
                 playing = true;
             }
-        
-
-
-
-
-
-
-
         }
 
-        private async void DetailButton_Click(object sender, RoutedEventArgs e)
+        private void DetailButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.Storage.StorageFolder folder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync(@"Assets");
-            //Windows.Storage.StorageFile file = await folder.GetFileAsync("onesong.mp3");
-            Windows.Storage.StorageFile file = await folder.GetFileAsync("Test.mp3");
-            this.Frame.Navigate(typeof(MusicDetailpage), file.Path);
+            MusicEntry entry = GlobalData._entryList[0];    // need to use the selected index from GUI ListBox
+
+            this.Frame.Navigate(typeof(MusicDetailpage), entry);
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -71,12 +64,9 @@ namespace MusicLibaryApp
             {
                 MusicEntry entry = e.Parameter as MusicEntry;
 
-                //entry.musicFilePath
-                //entry.imageFilePath
+                GlobalData._entryList.Add(entry);
 
-                // save here
-
-
+                // add new entry to GUI listbox here
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -14,6 +15,11 @@ namespace MusicLibaryApp
     /// </summary>
     public sealed partial class AddMusicPage : Page
     {
+
+        private string _imgPath;
+        private string _mp3Path;
+
+
         public AddMusicPage()
         {
             this.InitializeComponent();
@@ -30,36 +36,58 @@ namespace MusicLibaryApp
 
             Windows.Storage.StorageFile imgfile = await picker.PickSingleFileAsync();
 
-            // Get the app's local folder to use as the destination folder.
-            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-
-            // Copy the file to the destination folder and rename it.
-            // Replace the existing file if the file already exists.
-            StorageFile copiedImgFile = await imgfile.CopyAsync(localFolder, imgfile.Name, NameCollisionOption.ReplaceExisting);
-
             if (imgfile != null)
             {
+                // Get the app's local folder to use as the destination folder.
+                StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+
+                // Copy the file to the destination folder and rename it.
+                // Replace the existing file if the file already exists.
+                StorageFile copiedImgFile = await imgfile.CopyAsync(localFolder, imgfile.Name, NameCollisionOption.ReplaceExisting);
+
                 this.TxtStrImg.Text = copiedImgFile.Name;
-                this.image.Source = new BitmapImage(new Uri("ms-appx:///" + this.TxtStrImg.Text));
+
+                BitmapImage image = new BitmapImage();
+                var storageFile = await StorageFile.GetFileFromPathAsync(copiedImgFile.Path);
+                using (Windows.Storage.Streams.IRandomAccessStream stream = await storageFile.OpenAsync(FileAccessMode.Read))
+                {
+                    await image.SetSourceAsync(stream);
+                }
+                this.image.Source = image;
+
+                _imgPath = copiedImgFile.Path;
             }
-            else
+        }
+
+        private void MP3MetafileReader(FileStream streamingfile)
+        {
+            byte[] b = new byte[128];
+            streamingfile.Seek(-128, SeekOrigin.End);
+            streamingfile.Read(b, 0, 128);
+            bool isSet = false;
+            String sFlag = System.Text.Encoding.Default.GetString(b, 0, 3);
+            if (sFlag.CompareTo("TAG") == 0)
             {
-                this.TxtStrImg.Text = "Operation cancelled";
+                System.Console.WriteLine("Tag   is   setted! ");
+                isSet = true;
+            }
+
+            if (isSet)
+            {
+                this.TxtStrTitle.Text = System.Text.Encoding.Default.GetString(b, 3, 30);
+                this.TxtStrSinger.Text = System.Text.Encoding.Default.GetString(b, 33, 30);
+                this.TxtStrAlbum.Text = System.Text.Encoding.Default.GetString(b, 63, 30);
+                this.TxtStrYear.Text = System.Text.Encoding.Default.GetString(b, 93, 4);
             }
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Save music file path and cover image file path in txt format
-            // show "saved"
-
-
-            // collect data from controls to music entry here
 
             MusicEntry entry = new MusicEntry();
 
-            //entry.musicFilePath = blabla;
-            //entry.imageFilePath = blablbla;
+            entry.musicFilePath = _mp3Path;
+            entry.imageFilePath = _imgPath;
 
 
             this.Frame.Navigate(typeof(MainPage), entry);   // passing parameter to the target page
@@ -79,22 +107,24 @@ namespace MusicLibaryApp
 
             Windows.Storage.StorageFile musicfile = await picker.PickSingleFileAsync();
 
-            // Get the app's local folder to use as the destination folder.
-            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-
-            // Copy the file to the destination folder and rename it.
-            // Replace the existing file if the file already exists.
-            StorageFile copiedMusicFile = await musicfile.CopyAsync(localFolder, musicfile.Name, NameCollisionOption.ReplaceExisting);
-
+            
             if (musicfile != null)
             {
-                 // Save musicfile path in the txt 
-            }
-            else
-            {
-                // show the file is empty
-            }
+                // Save musicfile path in the txt 
+                // Get the app's local folder to use as the destination folder.
+                StorageFolder localFolder = ApplicationData.Current.LocalFolder;
 
+                // Copy the file to the destination folder and rename it.
+                // Replace the existing file if the file already exists.
+                StorageFile copiedMusicFile = await musicfile.CopyAsync(localFolder, musicfile.Name, NameCollisionOption.ReplaceExisting);
+
+                this.TxtStrFile.Text = copiedMusicFile.Name;
+
+                FileStream fs = new FileStream(copiedMusicFile.Path, FileMode.Open, FileAccess.Read, FileShare.Read); //
+                MP3MetafileReader(fs);
+
+                _mp3Path = copiedMusicFile.Path;
+            }
         }
     }
 

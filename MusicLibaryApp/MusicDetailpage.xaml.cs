@@ -22,24 +22,22 @@ namespace MusicLibaryApp
             this.InitializeComponent();
         }
 
+        private MusicEntry _musicEntry;
 
-        //private string _entityId;
-        private string _filePath;
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //_entityId = e.Parameter as string;
-            _filePath = e.Parameter as string;
+            _musicEntry = e.Parameter as MusicEntry;
 
-
-            /*
-            //FileStream fs = new FileStream("C:\\Users\\andycom\\Music\\Test.mp3", FileMode.Open);
-            FileStream fs = new FileStream("Test.mp3", FileMode.Open, FileAccess.Read, FileShare.Read); // working
-            //FileStream fs = new FileStream("onesong.mp3", FileMode.Open, FileAccess.Read, FileShare.Read);
-            */
-
-            FileStream fs = new FileStream(_filePath, FileMode.Open, FileAccess.Read, FileShare.Read); // working
+            FileStream fs = new FileStream(_musicEntry.musicFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             MP3MetafileReader(fs);
+
+            BitmapImage image = new BitmapImage();
+            var storageFile = await StorageFile.GetFileFromPathAsync(_musicEntry.imageFilePath);
+            using (Windows.Storage.Streams.IRandomAccessStream stream = await storageFile.OpenAsync(FileAccessMode.Read))
+            {
+                await image.SetSourceAsync(stream);
+            }
+            this.image.Source = image;
         }
 
         private void MP3MetafileReader(FileStream streamingfile)
