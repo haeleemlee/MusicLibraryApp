@@ -17,19 +17,27 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
-
+        
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="2*" />
+                <RowDefinition Height="23*" />
+                <RowDefinition Height="121*" />
             </Grid.RowDefinitions>
-            <TextBlock Text="Title" FontFamily="Segoe UI"/>
-            <ListView Grid.Row="1">
-                <ListViewItem Content="1.onesong"/>
+            <TextBlock Grid.Row="0" Text="Title" FontFamily="Segoe UI" FontSize="30"/>
+
+            <ListView Name="Musiclist" Grid.Row="1" BorderThickness="1,1,1,1"  BorderBrush="Black" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding MusicTitle}" Width="100" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
             </ListView>
+
         </Grid>
 
         <Grid Grid.Column="1">
@@ -42,6 +50,7 @@
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
+
 
             <Button Name="PlayButton" Click="PlayButton_Click">Play</Button>
             <Button Grid.Row="1" Click="DetailButton_Click">Details</Button>

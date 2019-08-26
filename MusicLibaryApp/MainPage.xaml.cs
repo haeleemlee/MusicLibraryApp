@@ -1,21 +1,16 @@
 ﻿using System;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
-using Windows.Media.Playback;
+using System.Collections.ObjectModel;
 using Windows.Media.Core;
-using System.Collections.Generic;
-
-
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+using Windows.Media.Playback;
+using Windows.UI.Popups;
+using Windows.UI.Xaml;
 
 namespace MusicLibaryApp
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : Windows.UI.Xaml.Controls.Page
     {
         MediaPlayer player;
         bool playing;
@@ -24,33 +19,68 @@ namespace MusicLibaryApp
         {
             this.InitializeComponent();
             player = new MediaPlayer();
-        }
-        
+            Musiclist.ItemsSource = MusicEntries;
+            //this.DataContext = await MusicEntry.GetAllMusicEntriesAsync();
 
+        }
+
+
+        public static ObservableCollection<MusicEntry> MusicEntries { set; get; } = new ObservableCollection<MusicEntry>();
+
+        protected async override void OnNavigatedTo(Windows.UI.Xaml.Navigation.NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            // this.DataContext = await MusicEntry.GetAllMusicEntriesAsync();
+            //if (e.Parameter != null && e.Parameter.GetType() == typeof(MusicEntry))
+            //{
+            //    MusicEntry entry = e.Parameter as MusicEntry;
+
+            //    GlobalData._entryList.Add(entry);
+
+            // add new entry to GUI listbox here
+            //}
+        }
         private async void PlayButton_Click(object sender, RoutedEventArgs e)
         {
+            if (Musiclist.SelectedItem == null)
+            {
+                var dialog = new MessageDialog("Please select one from the list.");
+                dialog.ShowAsync();
+                return;
+            }
 
-            MusicEntry musicEntry = GlobalData._entryList[0]; // need to use index from GUI list box
-            Windows.Storage.StorageFile file = await Windows.Storage.StorageFile.GetFileFromPathAsync(musicEntry.musicFilePath);
+            var music = (MusicEntry)Musiclist.SelectedItem;
+
+            Windows.Storage.StorageFile file = await Windows.Storage.StorageFile.GetFileFromPathAsync(music.MusicFilePath);
 
             player.AutoPlay = false;
             player.Source = MediaSource.CreateFromStorageFile(file);
 
-            if(playing)
-            { player.Source=null;
+            if (playing)
+            {
+                player.Source = null;
                 playing = false;
             }
             else
-            { player.Play();
+            {
+                player.Play();
                 playing = true;
             }
         }
 
         private void DetailButton_Click(object sender, RoutedEventArgs e)
         {
-            MusicEntry entry = GlobalData._entryList[0];    // need to use the selected index from GUI ListBox
+            if (Musiclist.SelectedItem == null)
+            {
+                var dialog = new MessageDialog("Please select one from the list.");
+                dialog.ShowAsync();
+                return;
+            }
 
-            this.Frame.Navigate(typeof(MusicDetailpage), entry);
+            var music = (MusicEntry)Musiclist.SelectedItem;
+            //MusicEntry entry = GlobalData._entryList[0];    // need to use the selected index from GUI ListBox
+
+            this.Frame.Navigate(typeof(MusicDetailpage), music);
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -58,27 +88,14 @@ namespace MusicLibaryApp
             this.Frame.Navigate(typeof(AddMusicPage));
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            if (e.Parameter != null && e.Parameter.GetType() == typeof(MusicEntry))
-            {
-                MusicEntry entry = e.Parameter as MusicEntry;
-
-                GlobalData._entryList.Add(entry);
-
-                // add new entry to GUI listbox here
-            }
-        }
-
-
-
         /*private void One_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ListView one = sender as ListView;
-            string selected = one.SelectedItem.ToString();
-            MessageDialog dlg = new MessageDialog("selected number;" + selected);
+{
+ListView one = sender as ListView;
+string selected = one.SelectedItem.ToString();
+MessageDialog dlg = new MessageDialog("selected number;" + selected);
 
-        }*/
+}*/
+
     }
 
-    }
+}

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
-
-using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -14,6 +13,7 @@ namespace MusicLibaryApp
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+
     public sealed partial class MusicDetailpage : Page
     {
 
@@ -28,11 +28,11 @@ namespace MusicLibaryApp
         {
             _musicEntry = e.Parameter as MusicEntry;
 
-            FileStream fs = new FileStream(_musicEntry.musicFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            FileStream fs = new FileStream(_musicEntry.MusicFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             MP3MetafileReader(fs);
 
             BitmapImage image = new BitmapImage();
-            var storageFile = await StorageFile.GetFileFromPathAsync(_musicEntry.imageFilePath);
+            var storageFile = await StorageFile.GetFileFromPathAsync(_musicEntry.ImageFilePath);
             using (Windows.Storage.Streams.IRandomAccessStream stream = await storageFile.OpenAsync(FileAccessMode.Read))
             {
                 await image.SetSourceAsync(stream);
@@ -61,11 +61,9 @@ namespace MusicLibaryApp
                 this.TxtStrYear.Text = System.Text.Encoding.Default.GetString(b, 93, 4);
             }
         }
-
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MainPage));
         }
-
     }
 }
