@@ -15,7 +15,8 @@ namespace MusicLibaryApp
         public string MusicFilePath { get; set; }
         public static void WriteMusicEntry(MusicEntry music)
         {
-            var MusicEntryData = $"{music.Album},{music.MusicFilePath},{music.MusicTitle},{music.ReleaseDate},{music.Singer},{music.ImageFilePath}";
+            var MusicEntryData = $"{music.MusicTitle},{music.MusicFilePath},{music.ImageFilePath}";
+            //var MusicEntryData = $"{music.Album},{music.MusicFilePath},{music.MusicTitle},{music.ReleaseDate},{music.Singer},{music.ImageFilePath}";
             FileHelper.WriteTextFileAsync(TEXT_FILE_NAME, MusicEntryData);
         }
 
@@ -36,11 +37,16 @@ namespace MusicLibaryApp
                 var music = new MusicEntry
                 {
                     MusicTitle = lineParts[0],
+                    MusicFilePath = lineParts[1],
+                    ImageFilePath = lineParts[2]
+                    /*
+                    MusicTitle = lineParts[0],
                     Album = lineParts[1],
                     Singer = lineParts[2],
                     ReleaseDate = lineParts[3],
                     ImageFilePath = lineParts[4],
                     MusicFilePath = lineParts[5]
+                    */
                 };
                 musicEntries.Add(music);
             }

@@ -42,7 +42,7 @@
             <TextBox Height="40" Name="EnterAlbum" Grid.Row="2" Grid.Column="1" Margin="0,0,20,0" />
             <TextBox Height="40" Name="EnterSinger"  Grid.Row="3" Grid.Column="1" Margin="0,0,20,0"  />
             <TextBox Height="40" Name="EnterTitle" Grid.Row="1" Grid.Column="1" Margin="0,0,20,0" />
-            <TextBox Height="40" Name="EnteryDate"  Grid.Row="4" Grid.Column="1" Margin="0,0,20,0"  />
+            <TextBox Height="40" Name="EnterDate"  Grid.Row="4" Grid.Column="1" Margin="0,0,20,0"  />
             <Grid Grid.Row="5" Grid.Column="1" Margin="0,0,20,0" VerticalAlignment="Center"  >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
